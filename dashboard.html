@@ -971,8 +971,27 @@
             }
         }
 
+        async function autoLoadBackendURLConfig() {
+            try {
+                let saved = localStorage.getItem('george_backend_url');
+                if (!saved) {
+                    const res = await fetch('backend_config.json');
+                    if (res.ok) {
+                        const cfg = await res.json();
+                        if (cfg && cfg.backend_url) {
+                            document.getElementById('backend-url-field').value = cfg.backend_url;
+                        }
+                    }
+                } else {
+                    document.getElementById('backend-url-field').value = saved;
+                }
+            } catch (e) {
+                console.log("No backend_config.json");
+            }
+        }
+
         function checkAdminPINSession() {
-            document.getElementById('backend-url-field').value = getBackendURL();
+            autoLoadBackendURLConfig();
             const session = localStorage.getItem('george_dashboard_pin_session');
             if (session === 'authenticated_2026') {
                 document.getElementById('pin-lock-modal').style.display = 'none';
