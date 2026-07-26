@@ -915,6 +915,9 @@
                     u = 'http://localhost:8000';
                 }
             }
+            if (u && !u.startsWith('http://') && !u.startsWith('https://')) {
+                u = 'https://' + u;
+            }
             if (u && u.endsWith('/')) {
                 u = u.slice(0, -1);
             }
@@ -944,6 +947,10 @@
                 }
             }
 
+            if (backendVal && !backendVal.startsWith('http://') && !backendVal.startsWith('https://')) {
+                backendVal = 'https://' + backendVal;
+            }
+
             if (backendVal && backendVal.endsWith('/')) {
                 backendVal = backendVal.slice(0, -1);
             }
@@ -957,7 +964,7 @@
                 }
                 const data = await res.json();
                 if (data.valid) {
-                    localStorage.setItem('george_dashboard_pin_session', 'authenticated_2026');
+                    localStorage.setItem('george_dashboard_pin_session', 'authenticated_3690');
                     document.getElementById('pin-lock-modal').style.display = 'none';
                     errorMsg.style.display = "none";
                     fetchLiveData();
@@ -993,7 +1000,7 @@
         function checkAdminPINSession() {
             autoLoadBackendURLConfig();
             const session = localStorage.getItem('george_dashboard_pin_session');
-            if (session === 'authenticated_2026') {
+            if (session === 'authenticated_3690') {
                 document.getElementById('pin-lock-modal').style.display = 'none';
                 return true;
             } else {
