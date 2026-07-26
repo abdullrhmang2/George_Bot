@@ -910,6 +910,11 @@
 
         function getBackendURL() {
             let u = localStorage.getItem('george_backend_url') || '';
+            if (!u) {
+                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') {
+                    u = 'http://localhost:8000';
+                }
+            }
             if (u && u.endsWith('/')) {
                 u = u.slice(0, -1);
             }
@@ -924,9 +929,19 @@
             let backendVal = backendField.value.trim();
 
             if (!pinVal) {
-                errorMsg.innerText = "⚠️ يرجى كتابة رمز الأمان أولاً!";
+                errorMsg.innerText = "⚠️ يرجى كتابة رمز الأمان السري أولاً!";
                 errorMsg.style.display = "block";
                 return;
+            }
+
+            if (!backendVal) {
+                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') {
+                    backendVal = 'http://localhost:8000';
+                } else {
+                    errorMsg.innerText = "⚠️ يرجى أدخال رابط سيرفر البوت (Backend URL) في الخانة أدناه أولاً!";
+                    errorMsg.style.display = "block";
+                    return;
+                }
             }
 
             if (backendVal && backendVal.endsWith('/')) {
@@ -937,6 +952,9 @@
             try {
                 const targetUrl = `${backendVal}/api/verify_pin?pin=${encodeURIComponent(pinVal)}`;
                 const res = await fetch(targetUrl);
+                if (!res.ok) {
+                    throw new Error(`سيرفر البوت أرجع رمز حالة HTTP ${res.status}`);
+                }
                 const data = await res.json();
                 if (data.valid) {
                     localStorage.setItem('george_dashboard_pin_session', 'authenticated_2026');
@@ -948,7 +966,7 @@
                     errorMsg.style.display = "block";
                 }
             } catch (err) {
-                errorMsg.innerText = "❌ خطأ في الاتصال بسيرفر البوت: " + err;
+                errorMsg.innerText = "❌ خطأ في الاتصال بسيرفر البوت: يرجى التأكد من كتابة رابط السيرفر بشكل صحيح وتأكد من تشغيل خادم البوت.";
                 errorMsg.style.display = "block";
             }
         }
