@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم جورج بوت الشاملة - George Bot Control Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Tajawal:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --base-font-size: 16px;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --card-hover: #f1f5f9;
+            --border-color: #e2e8f0;
+            --border-highlight: #cbd5e1;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --primary: #2563eb;
+            --primary-light: #dbeafe;
+            --secondary: #059669;
+            --secondary-light: #d1fae5;
+            --accent: #d97706;
+            --accent-light: #fef3c7;
+            --danger: #dc2626;
+            --danger-light: #fee2e2;
+            --purple: #7c3aed;
+            --purple-light: #ede9fe;
+        }
+
+        body.font-large {
+            --base-font-size: 19px;
+        }
+
+        body.font-huge {
+            --base-font-size: 22px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', 'Outfit', sans-serif;
+            transition: font-size 0.15s ease, background 0.2s ease, border 0.2s ease;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 1.5rem;
+            min-height: 100vh;
+            font-size: var(--base-font-size);
+            line-height: 1.6;
+            background-image: radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.04) 0%, transparent 40%),
+                              radial-gradient(circle at 90% 80%, rgba(5, 150, 105, 0.04) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.2rem;
+            border-bottom: 2px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 1rem;
+            background: #ffffff;
+            padding: 1.2rem 1.6rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .logo-section h1 {
+            font-size: 2.1rem;
+            font-weight: 900;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .logo-section p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            margin-top: 0.2rem;
+            font-weight: 600;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .font-size-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #f1f5f9;
+            padding: 0.4rem 0.8rem;
+            border-radius: 50px;
+            border: 1px solid var(--border-color);
+        }
+
+        .font-size-btn {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.25rem 0.7rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .font-size-btn:hover, .font-size-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--secondary-light);
+            color: var(--secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            border: 1px solid rgba(5, 150, 105, 0.3);
+        }
+
+        .pulse-dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--secondary);
+            border-radius: 50%;
+            animation: pulse 1.2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 0.5; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.5; }
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            font-weight: 800;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .tab-btn:hover, .tab-btn.active {
+            color: var(--primary);
+            background: var(--primary-light);
+            border-color: var(--primary);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.4rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 6px;
+            height: 100%;
+            background: var(--card-accent, var(--primary));
+        }
+
+        .stat-card h3 {
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .stat-card .value {
+            font-size: 2.3rem;
+            font-weight: 900;
+            margin: 0.3rem 0;
+            color: var(--text-main);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .pending-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 1.4rem;
+        }
+
+        .pending-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.4rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .pending-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 0.4rem;
+        }
+
+        .info-label {
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .info-val {
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.2rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-approve {
+            background: var(--secondary-light);
+            color: var(--secondary);
+            border: 1px solid rgba(5, 150, 105, 0.4);
+        }
+        .btn-approve:hover {
+            background: var(--secondary);
+            color: #ffffff;
+        }
+
+        .btn-reject {
+            background: var(--danger-light);
+            color: var(--danger);
+            border: 1px solid rgba(220, 38, 38, 0.4);
+        }
+        .btn-reject:hover {
+            background: var(--danger);
+            color: #ffffff;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #ffffff;
+        }
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-info {
+            background: var(--primary-light);
+            color: var(--primary);
+            border: 1px solid rgba(37, 99, 235, 0.4);
+        }
+        .btn-info:hover {
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        .broadcast-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.8rem;
+            max-width: 850px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .form-group {
+            margin-bottom: 1.4rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-weight: 800;
+            color: var(--text-main);
+            font-size: 1.05rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.9rem 1.1rem;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-main);
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        textarea.form-control {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: right;
+        }
+
+        th, td {
+            padding: 1.1rem 1.4rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 1.05rem;
+        }
+
+        th {
+            background: #f1f5f9;
+            color: var(--text-main);
+            font-weight: 900;
+        }
+
+        tr.clickable-row {
+            cursor: pointer;
+        }
+
+        tr.clickable-row:hover {
+            background: #f8fafc;
+        }
+
+        .badge {
+            padding: 0.35rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 800;
+        }
+        .badge-active { background: var(--secondary-light); color: var(--secondary); }
+        .badge-pending { background: var(--accent-light); color: var(--accent); }
+        .badge-banned { background: var(--danger-light); color: var(--danger); }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.65);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 1.5rem;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            width: 100%;
+            max-width: 1050px;
+            max-height: 92vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+        }
+
+        .modal-header {
+            padding: 1.4rem 1.8rem;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.8rem;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: var(--text-main);
+        }
+
+        .modal-body {
+            padding: 1.8rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.4rem;
+        }
+
+        .progress-bar-container {
+            background: #e2e8f0;
+            border-radius: 50px;
+            height: 14px;
+            overflow: hidden;
+            width: 100%;
+            margin-top: 0.4rem;
+        }
+
+        .progress-bar-fill {
+            background: var(--primary);
+            height: 100%;
+            border-radius: 50px;
+            transition: width 0.4s ease;
+        }
+
+        .token-source-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem 1.4rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .george-ai-box {
+            background: #f8fafc;
+            border: 1px solid var(--primary-light);
+            border-radius: 14px;
+            padding: 1.4rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .suggestion-chips {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .chip {
+            background: var(--primary-light);
+            color: var(--primary);
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .chip:hover {
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        .george-response-view {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.2rem;
+            color: var(--text-main);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            min-height: 120px;
+            max-height: 350px;
+            overflow-y: auto;
+            font-weight: 600;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.02);
+        }
+
+        .chat-bubbles-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .chat-bubble {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .chat-bubble-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .chat-bubble-content {
+            font-size: 1.05rem;
+            color: var(--text-main);
+            line-height: 1.6;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body id="app-body">
+
+    <!-- نافذة قفل رمز الأمان PIN Modal -->
+    <div id="pin-lock-modal" class="modal" style="display:flex; z-index:9999;">
+        <div class="modal-content" style="max-width:460px; padding:2.2rem; text-align:center; margin:auto;">
+            <div style="font-size:3rem; margin-bottom:0.5rem;">🔒</div>
+            <h2 style="color:var(--primary); font-size:1.8rem; margin-bottom:0.4rem; font-weight:900;">حماية لوحة التحكم</h2>
+            <p style="color:var(--text-muted); font-size:1.05rem; margin-bottom:1.2rem; font-weight:700;">أدخل رمز الأمان السري ورابط السيرفر للدخول للداشبورد:</p>
+            
+            <div style="margin-bottom:1rem; text-align:right;">
+                <label style="font-weight:800; font-size:0.95rem; color:var(--text-main);">رمز الأمان (PIN):</label>
+                <input type="password" id="pin-input-field" class="form-control" style="font-size:1.5rem; text-align:center; letter-spacing:6px; margin-top:0.4rem;" placeholder="****" onkeyup="if(event.key==='Enter') verifyAdminPIN()">
+            </div>
+
+            <div style="margin-bottom:1.4rem; text-align:right;">
+                <label style="font-weight:800; font-size:0.95rem; color:var(--text-main);">رابط سيرفر البوت (Backend URL):</label>
+                <input type="text" id="backend-url-field" class="form-control" style="font-size:0.95rem; margin-top:0.4rem;" placeholder="مثال: http://localhost:8000">
+                <span style="font-size:0.8rem; color:var(--text-muted);">اتركه كما هو إذا كنت تستخدمه محلياً أو أدخل رابط السيرفر المباشر.</span>
+            </div>
+
+            <button class="btn btn-primary" onclick="verifyAdminPIN()" style="width:100%; padding:0.9rem; font-size:1.15rem;">🔑 تسجيل الدخول للداشبورد</button>
+            <p id="pin-error-msg" style="color:var(--danger); margin-top:1rem; font-weight:800; display:none;"></p>
+        </div>
+    </div>
+
+    <header>
+        <div class="logo-section">
+            <h1>🤖 لوحة تحكم جورج بوت اللحظية</h1>
+            <p>نظام التتبع والتدقيق الفوري وإدارة الطلاب الموحد (GitHub Pages)</p>
+        </div>
+        <div class="controls">
+            <div class="font-size-controls">
+                <span style="font-size: 0.95rem; color: var(--text-muted); font-weight:800;">🔍 الخط:</span>
+                <button class="font-size-btn" onclick="setFontSize('normal')" id="btn-fs-normal">اعتيادي</button>
+                <button class="font-size-btn" onclick="setFontSize('large')" id="btn-fs-large">كبير 🔍</button>
+                <button class="font-size-btn" onclick="setFontSize('huge')" id="btn-fs-huge">ضخم 🔍+</button>
+            </div>
+
+            <button class="btn btn-info" style="padding:0.4rem 0.8rem; font-size:0.9rem;" onclick="openBackendConfig()">⚙️ السيرفر</button>
+            <button class="btn btn-reject" style="padding:0.4rem 0.8rem; font-size:0.9rem;" onclick="logoutAdminPIN()">🔒 قفل</button>
+
+            <div class="status-badge">
+                <div class="pulse-dot">
+                    <span style="position:absolute; width:100%; height:100%; background:inherit; border-radius:inherit; animation: pulse 1.2s infinite;"></span>
+                </div>
+                <span>مباشر - تحديث لحظي</span>
+            </div>
+            <span id="last-update" style="font-size: 0.9rem; color: var(--text-muted); margin-right: 0.5rem; font-weight:800;">🕒 جاري التحميل...</span>
+        </div>
+    </header>
+
+    <div class="stats-grid">
+        <div class="stat-card" style="--card-accent: #059669;">
+            <h3>الطلاب الموثقين والنشطين</h3>
+            <div class="value" id="stat-verified">0</div>
+            <span style="font-size: 0.85rem; color: #059669; font-weight:800;">✅ موثق ومفعل</span>
+        </div>
+        <div class="stat-card" style="--card-accent: #d97706;">
+            <h3>الطلبات المعلقة قيد الفحص</h3>
+            <div class="value" id="stat-pending">0</div>
+            <span style="font-size: 0.85rem; color: #d97706; font-weight:800;">⏳ بانتظار أدمن</span>
+        </div>
+        <div class="stat-card" style="--card-accent: #dc2626;">
+            <h3>الحسابات المحظورة والمحذوفة</h3>
+            <div class="value" id="stat-banned">0</div>
+            <span style="font-size: 0.85rem; color: #dc2626; font-weight:800;">❌ محظور بقرار</span>
+        </div>
+        <div class="stat-card" style="--card-accent: #7c3aed;">
+            <h3>المبالغ المستهلكة اليوم ($)</h3>
+            <div class="value" id="stat-today-cost">$0.00</div>
+            <span style="font-size: 0.85rem; color: #7c3aed; font-weight:800;">💳 تكلفة توكنات اليوم بالدولار</span>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('students-tab', this)">👥 دليل الطلاب والإدارة</button>
+        <button class="tab-btn" onclick="switchTab('groups-log-tab', this)">💬 سجلات الكروبات الكاملة</button>
+        <button class="tab-btn" onclick="switchTab('tokens-tab', this)">⚡ مراقبة الاستهلاك والتكلفة 💳</button>
+        <button class="tab-btn" onclick="switchTab('pending-tab', this)">⏳ الطلبات المعلقة (<span id="pending-count-badge">0</span>)</button>
+        <button class="tab-btn" onclick="switchTab('broadcast-tab', this)">📢 مركز التبليغات والإذاعة</button>
+    </div>
+
+    <div id="students-tab" class="tab-content active">
+        <div style="margin-bottom: 1rem; display: flex; gap: 1rem;">
+            <input type="text" id="search-input" class="form-control" placeholder="🔍 بحث باسم الطالب، المعرف الرقمي، أو اليوزرنيم..." onkeyup="filterStudents()">
+        </div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>المعرف الرقمي (User ID)</th>
+                        <th>اسم الطالب الرسمي</th>
+                        <th>اسم المستخدم (@username)</th>
+                        <th>الحالة</th>
+                        <th>تاريخ التوثيق</th>
+                        <th>التفاصيل والسجلات</th>
+                    </tr>
+                </thead>
+                <tbody id="students-table-body">
+                    <tr><td colspan="6" style="text-align:center; color:var(--text-muted);">جاري تحميل دليل الطلاب...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- تبويب سجلات الكروبات الدراسية الجماعية الكاملة مع تحليل الذكاء الاصطناعي -->
+    <div id="groups-log-tab" class="tab-content">
+        <div class="broadcast-box" style="max-width: 100%;">
+            <h2 style="margin-bottom: 1.2rem; color: var(--primary); font-size:1.5rem; display:flex; align-items:center; gap:0.5rem;">
+                👥 سجل المحادثات والنقاشات الجماعية الكاملة للكروبات الدراسية
+            </h2>
+
+            <!-- صندوق اسأل جورج عن الكروبات بالذكاء الاصطناعي -->
+            <div class="george-ai-box" style="margin-bottom: 1.5rem;">
+                <h3 style="color:var(--primary); font-size:1.2rem; font-weight:900; display:flex; align-items:center; gap:0.5rem;">
+                    🧠 اسأل جورج عن محادثات ونقاشات هذه المجموعة بالذكاء الاصطناعي
+                </h3>
+                <div class="suggestion-chips">
+                    <span class="chip" onclick="askGeorgeGroupPreset('شنو تلخيص المحادثات والنقاشات الي صارت بهالكروب اليوم؟')">💡 تلخيص حوارات ونقاشات الكروب</span>
+                    <span class="chip" onclick="askGeorgeGroupPreset('منو اكثر الطلاب الي تحجوا بهالكروب وشنو ردوا على بعض؟')">💡 الطلاب الأكثر نشاطاً والردود</span>
+                    <span class="chip" onclick="askGeorgeGroupPreset('هل اكو أي مخالفات أو حوارات غير ملائمة بين الطلاب بالكروب؟')">💡 كشف المخالفات والنقاشات الحادة</span>
+                </div>
+                <div style="display:flex; gap:0.8rem;">
+                    <input type="text" id="george-group-ai-input" class="form-control" placeholder="اكتب سؤالك للذكاء الاصطناعي جورج حول محادثات ورسائل هذا الكروب...">
+                    <button class="btn btn-primary" onclick="askGeorgeGroupAI()" style="white-space:nowrap; font-size:1.05rem;">🚀 اسأل جورج عن الكروب</button>
+                </div>
+                <div class="george-response-view" id="george-group-response-box">
+                    💡 حدد الكروب واكتب سؤالك أعلاه وانقر "اسأل جورج عن الكروب" ليقوم جورج بقراءة حوارات الكروب وإعطائك تحليلاً مفصلاً بالنص فورياً.
+                </div>
+            </div>
+
+            <div style="display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1.2rem;">
+                <select id="main-group-select" class="form-control" style="max-width:380px;" onchange="fetchGroupLogs()">
+                    <option value="all">🌐 جميع الكروبات الدراسية المسجلة</option>
+                </select>
+                <input type="text" id="main-group-search" class="form-control" style="max-width:320px;" placeholder="🔍 بحث في حوارات ومحادثات الكروبات..." onkeyup="renderGroupLogsTimeline()">
+            </div>
+            <div class="chat-bubbles-container" id="main-groups-timeline" style="max-height: 550px;">
+                ⏳ جاري تحميل سجلات الكروبات...
+            </div>
+        </div>
+    </div>
+
+    <!-- تبويب مراقبة استهلاك التوكنات والتكلفة -->
+    <div id="tokens-tab" class="tab-content">
+        <div class="broadcast-box" style="max-width: 100%;">
+            <h2 style="margin-bottom: 1.4rem; color: var(--purple); font-size:1.6rem; display:flex; align-items:center; gap:0.5rem;">
+                ⚡ مراقبة استهلاك التوكنات والتكلفة المالية لذكاء Gemini API
+            </h2>
+            
+            <div class="stats-grid" style="margin-bottom: 1.8rem; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));">
+                <div class="stat-card" style="--card-accent: #059669;">
+                    <h3>إجمالي المصروف الكلي ($)</h3>
+                    <div class="value" id="t-stat-cost-usd">$0.00</div>
+                    <span style="font-size: 0.85rem; color: #059669; font-weight:800;">💳 Total Cost in USD</span>
+                </div>
+                <div class="stat-card" style="--card-accent: #d97706;">
+                    <h3>التكلفة بالدينار العراقي (IQD)</h3>
+                    <div class="value" id="t-stat-cost-iqd">0 د.ع</div>
+                    <span style="font-size: 0.85rem; color: #d97706; font-weight:800;">🪙 Approx Cost in IQD</span>
+                </div>
+                <div class="stat-card" style="--card-accent: #7c3aed;">
+                    <h3>إجمالي التوكنات الكلي</h3>
+                    <div class="value" id="t-stat-total">0</div>
+                    <span style="font-size: 0.85rem; color: #7c3aed; font-weight:800;">⚡ Total Tokens</span>
+                </div>
+                <div class="stat-card" style="--card-accent: #2563eb;">
+                    <h3>توكنات المدخلات (Input)</h3>
+                    <div class="value" id="t-stat-input">0</div>
+                    <span style="font-size: 0.85rem; color: #2563eb; font-weight:800;">📥 Prompt Tokens</span>
+                </div>
+                <div class="stat-card" style="--card-accent: #059669;">
+                    <h3>توكنات المخرجات (Output)</h3>
+                    <div class="value" id="t-stat-output">0</div>
+                    <span style="font-size: 0.85rem; color: #059669; font-weight:800;">📤 Candidates Tokens</span>
+                </div>
+            </div>
+
+            <h3 style="margin-bottom: 1rem; color: var(--text-main); font-size:1.25rem;">📊 أين وكيف صُرفت الفلوس والتوكنات؟ (التوزيع حسب الوظائف)</h3>
+            <div id="tokens-sources-container" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap:1.2rem; margin-bottom: 2rem;">
+                جاري تحليل أسباب ومواقع الاستهلاك والمبالغ...
+            </div>
+
+            <h3 style="margin-bottom: 1rem; color: var(--text-main); font-size:1.25rem;">📜 سجل العمليات اللحظية والتكلفة المالية لـ Gemini API</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>التاريخ والوقت</th>
+                            <th>الخدمة / الميزة المستهلكة</th>
+                            <th>التوكنات المدخلة</th>
+                            <th>التوكنات المخرجة</th>
+                            <th>إجمالي التوكنات</th>
+                            <th>التكلفة بالدولار ($)</th>
+                            <th>مقتطف الطلب / السؤال</th>
+                        </tr>
+                    </thead>
+                    <tbody id="token-calls-table-body">
+                        <tr><td colspan="7" style="text-align:center; color:var(--text-muted);">جاري تحميل سجل الاستدعاءات...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="pending-tab" class="tab-content">
+        <div id="pending-container" class="pending-grid">
+            <p style="color: var(--text-muted);">⏳ جاري جلب الطلبات المعلقة...</p>
+        </div>
+    </div>
+
+    <div id="broadcast-tab" class="tab-content">
+        <div class="broadcast-box">
+            <h2 style="margin-bottom: 1.2rem; color: var(--primary); font-size:1.5rem;">📢 إرسال تبليغ موجه للطلاب</h2>
+            <div class="form-group">
+                <label>نوع المستهدفين:</label>
+                <select id="broadcast-target" class="form-control">
+                    <option value="all_verified">🌐 جميع الطلاب الموثقين والنشطين</option>
+                    <option value="all_pending">⏳ جميع الطلاب المعلقين</option>
+                    <option value="specific">🎯 طالب أو طلاب محددين (أدخل المعرفات أو الأسماء)</option>
+                </select>
+            </div>
+            <div class="form-group" id="specific-users-group" style="display:none;">
+                <label>معرفات أو أسماء الطلاب (افصل بينها بفارزة):</label>
+                <input type="text" id="specific-users-input" class="form-control" placeholder="مثال: 1057505860, عبدالرحمن فتحي غازي">
+            </div>
+            <div class="form-group">
+                <label>نص التبليغ:</label>
+                <textarea id="broadcast-text" class="form-control" placeholder="اكتب نص التبليغ الرسمي هنا..."></textarea>
+            </div>
+            <button class="btn btn-primary" onclick="sendBroadcast()" style="width: 100%; padding: 0.9rem; font-size:1.1rem;">🚀 إرسال التبليغ الآن</button>
+            <p id="broadcast-status" style="margin-top: 1rem; font-weight: bold; font-size:1.05rem;"></p>
+        </div>
+    </div>
+
+    <!-- نافذة تفاصيل وسجلات الطالب الشاملة Modal -->
+    <div id="student-details-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>👤 الملف الشخصي وسجلات الطالب الكاملة</h2>
+                <button class="close-btn" onclick="closeStudentModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                
+                <div class="student-profile-card">
+                    <img id="modal-student-img" src="" onerror="this.src='https://via.placeholder.com/180x170?text=No+ID'" onclick="openImageModal(this.src)" title="انقر لتكبير صورة الهوية">
+                    <div class="profile-details-grid">
+                        <div class="info-row"><span class="info-label">اسم الطالب:</span> <span class="info-val" id="m-full-name">--</span></div>
+                        <div class="info-row"><span class="info-label">المعرف الرقمي:</span> <span class="info-val" id="m-user-id">--</span></div>
+                        <div class="info-row"><span class="info-label">اليوزرنيم:</span> <span class="info-val" id="m-username">--</span></div>
+                        <div class="info-row"><span class="info-label">الاسم بالهوية:</span> <span class="info-val" id="m-extracted-name">--</span></div>
+                        <div class="info-row"><span class="info-label">نسبة المطابقة:</span> <span class="info-val" id="m-similarity" style="color:var(--accent);">--</span></div>
+                        <div class="info-row"><span class="info-label">الحالة الحالية:</span> <span class="info-val" id="m-status">--</span></div>
+                        <div class="info-row"><span class="info-label">الرقم الجامعي:</span> <span class="info-val" id="m-univ-id">--</span></div>
+                        <div class="info-row"><span class="info-label">العنوان / الولادة:</span> <span class="info-val" id="m-address">--</span></div>
+                        <div class="info-row"><span class="info-label">تاريخ التوثيق:</span> <span class="info-val" id="m-verification-time">--</span></div>
+                        <div class="info-row"><span class="info-label">طريقة التوثيق:</span> <span class="info-val" id="m-verification-method">--</span></div>
+                    </div>
+                </div>
+
+                <div class="modal-action-bar">
+                    <button class="btn btn-reject" onclick="executeModalAction('ban')">❌ حظر / طرد الطالب وتصفية حسابه</button>
+                    <button class="btn btn-approve" onclick="executeModalAction('restore')">✅ إلغاء الحظر والاستعادة للتوثيق</button>
+                    <button class="btn btn-info" onclick="sendDirectMessageToStudent()">📢 إرسال رسالة خاصة للطالب</button>
+                </div>
+
+                <div class="logs-section">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.6rem;">
+                        <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
+                            <button class="log-tab-btn active" onclick="switchLogTab('groups', this)">💬 محادثات الكروبات الدراسية</button>
+                            <button class="log-tab-btn" onclick="switchLogTab('memory', this)">🤖 محادثات الذكاء الاصطناعي الخاص</button>
+                            <button class="log-tab-btn" onclick="switchLogTab('george_ai', this)">🧠 اسأل جورج عن الطالب والمقارنات</button>
+                            <button class="log-tab-btn" onclick="switchLogTab('all', this)">📜 كافة السجلات</button>
+                        </div>
+                        <input type="text" id="log-search-input" class="form-control" style="max-width:250px; padding:0.5rem 0.9rem;" placeholder="🔍 بحث في الرسائل..." onkeyup="renderLogsView()">
+                    </div>
+
+                    <div id="group-select-wrapper" style="display:flex; align-items:center; gap:0.8rem; background:#f8fafc; padding:0.8rem 1.1rem; border-radius:10px; border:1px solid var(--border-color);">
+                        <label style="font-weight:800; font-size:1rem; color:var(--primary);">اختر الكروب الدراسي:</label>
+                        <select id="group-filter-select" class="form-control" style="max-width:340px;" onchange="renderLogsView()">
+                            <option value="all">🌐 جميع الكروبات التي تكلم فيها الطالب</option>
+                        </select>
+                    </div>
+
+                    <div id="george-ai-wrapper" class="george-ai-box" style="display:none;">
+                        <h3 style="color:var(--primary); font-size:1.15rem; font-weight:900; display:flex; align-items:center; gap:0.5rem;">
+                            🧠 اسأل جورج عن هذا الطالب، المقارنات، والصفات المشتركة
+                        </h3>
+                        <div class="suggestion-chips">
+                            <span class="chip" onclick="askGeorgePreset('شنو تلخيص محادثات ونشاط هذا الطالب وسلوكه بالكروبات؟')">💡 تلخيص النشاط والسلوك</span>
+                            <span class="chip" onclick="askGeorgePreset('منو هم الطلاب المشتركين وياه بنفس المنطقة أو الرقم الجامعي أو الكروبات؟')">💡 الطلاب المشتركين بالمواصفات</span>
+                            <span class="chip" onclick="askGeorgePreset('قارن لي بين هذا الطالب وبين الطالب (أدخل الاسم هنا)...')">💡 مقارنة مع طالب آخر</span>
+                        </div>
+                        <div style="display:flex; gap:0.8rem;">
+                            <input type="text" id="george-ai-input" class="form-control" placeholder="اكتب سؤالك للذكاء الاصطناعي جورج حول هذا الطالب...">
+                            <button class="btn btn-primary" onclick="askGeorgeAI()" style="white-space:nowrap; font-size:1.05rem;">🚀 اسأل جورج</button>
+                        </div>
+                        <div class="george-response-view" id="george-response-box">
+                            💡 اكتب سؤالك أعلاه وانقر "اسأل جورج" ليقوم جورج بقراءة سجلات الطالب وإجراء التحليل الرقمي والمقارنة فورياً.
+                        </div>
+                    </div>
+
+                    <div class="chat-bubbles-container" id="chat-bubbles-box">
+                        جاري تحميل السجلات والرسائل...
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="image-modal" class="modal" onclick="this.style.display='none'">
+        <img id="modal-img" src="" alt="صورة الهوية">
+    </div>
+
+    <script>
+        let allStudents = [];
+        let currentModalUserId = null;
+        let currentStudentLogsData = null;
+        let currentLogTab = 'groups';
+        let currentGroupLogsAllData = null;
+
+        function getBackendURL() {
+            let u = localStorage.getItem('george_backend_url') || '';
+            if (u && u.endsWith('/')) {
+                u = u.slice(0, -1);
+            }
+            return u;
+        }
+
+        async function verifyAdminPIN() {
+            const inputField = document.getElementById('pin-input-field');
+            const backendField = document.getElementById('backend-url-field');
+            const errorMsg = document.getElementById('pin-error-msg');
+            const pinVal = inputField.value.trim();
+            let backendVal = backendField.value.trim();
+
+            if (!pinVal) {
+                errorMsg.innerText = "⚠️ يرجى كتابة رمز الأمان أولاً!";
+                errorMsg.style.display = "block";
+                return;
+            }
+
+            if (backendVal && backendVal.endsWith('/')) {
+                backendVal = backendVal.slice(0, -1);
+            }
+            localStorage.setItem('george_backend_url', backendVal);
+
+            try {
+                const targetUrl = `${backendVal}/api/verify_pin?pin=${encodeURIComponent(pinVal)}`;
+                const res = await fetch(targetUrl);
+                const data = await res.json();
+                if (data.valid) {
+                    localStorage.setItem('george_dashboard_pin_session', 'authenticated_2026');
+                    document.getElementById('pin-lock-modal').style.display = 'none';
+                    errorMsg.style.display = "none";
+                    fetchLiveData();
+                } else {
+                    errorMsg.innerText = data.message || "❌ رمز الأمان غير صحيح!";
+                    errorMsg.style.display = "block";
+                }
+            } catch (err) {
+                errorMsg.innerText = "❌ خطأ في الاتصال بسيرفر البوت: " + err;
+                errorMsg.style.display = "block";
+            }
+        }
+
+        function checkAdminPINSession() {
+            document.getElementById('backend-url-field').value = getBackendURL();
+            const session = localStorage.getItem('george_dashboard_pin_session');
+            if (session === 'authenticated_2026') {
+                document.getElementById('pin-lock-modal').style.display = 'none';
+                return true;
+            } else {
+                document.getElementById('pin-lock-modal').style.display = 'flex';
+                return false;
+            }
+        }
+
+        function logoutAdminPIN() {
+            localStorage.removeItem('george_dashboard_pin_session');
+            document.getElementById('pin-lock-modal').style.display = 'flex';
+            document.getElementById('pin-input-field').value = '';
+        }
+
+        function openBackendConfig() {
+            document.getElementById('pin-lock-modal').style.display = 'flex';
+        }
+
+        function setFontSize(mode) {
+            const body = document.getElementById('app-body');
+            body.classList.remove('font-large', 'font-huge');
+            document.querySelectorAll('.font-size-btn').forEach(b => b.classList.remove('active'));
+
+            if (mode === 'large') {
+                body.classList.add('font-large');
+                document.getElementById('btn-fs-large').classList.add('active');
+            } else if (mode === 'huge') {
+                body.classList.add('font-huge');
+                document.getElementById('btn-fs-huge').classList.add('active');
+            } else {
+                document.getElementById('btn-fs-normal').classList.add('active');
+            }
+            localStorage.setItem('george_dashboard_font_size', mode);
+        }
+
+        const savedFontSize = localStorage.getItem('george_dashboard_font_size') || 'normal';
+        setFontSize(savedFontSize);
+
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+
+            if (tabId === 'groups-log-tab') {
+                fetchGroupLogs();
+            } else if (tabId === 'tokens-tab') {
+                fetchTokenStats();
+            }
+        }
+
+        function askGeorgeGroupPreset(q) {
+            document.getElementById('george-group-ai-input').value = q;
+            askGeorgeGroupAI();
+        }
+
+        async function askGeorgeGroupAI() {
+            const groupSelect = document.getElementById('main-group-select');
+            const selectedGroup = groupSelect.value;
+            const qInput = document.getElementById('george-group-ai-input');
+            const q = qInput.value.trim();
+            const resBox = document.getElementById('george-group-response-box');
+
+            if (!q) {
+                alert("⚠️ يرجى كتابة سؤالك لجورج الذكي حول المجموعة أولاً!");
+                return;
+            }
+
+            resBox.innerText = "⏳ جورج يقرأ سجلات محادثات الكروب ويحلل الردود والتفاعلات بين الطلاب...";
+            resBox.style.color = "var(--accent)";
+
+            try {
+                const res = await fetch(`${getBackendURL()}/api/george_ask_group?group_name=${encodeURIComponent(selectedGroup)}&question=${encodeURIComponent(q)}`);
+                const data = await res.json();
+                resBox.innerText = data.answer;
+                resBox.style.color = "var(--text-main)";
+            } catch (err) {
+                resBox.innerText = "❌ حدث خطأ أثناء تحليل جورج للمجموعة: " + err;
+                resBox.style.color = "var(--danger)";
+            }
+        }
+
+        async function fetchTokenStats() {
+            try {
+                const res = await fetch(`${getBackendURL()}/api/token_stats`);
+                const stats = await res.json();
+
+                document.getElementById('t-stat-total').innerText = stats.total_tokens.toLocaleString();
+                document.getElementById('t-stat-input').innerText = stats.total_input_tokens.toLocaleString();
+                document.getElementById('t-stat-output').innerText = stats.total_output_tokens.toLocaleString();
+                
+                document.getElementById('t-stat-cost-usd').innerText = '$' + (stats.total_cost_usd || 0).toFixed(4);
+                document.getElementById('t-stat-cost-iqd').innerText = (stats.total_cost_iqd || 0).toLocaleString() + ' د.ع';
+                document.getElementById('stat-today-cost').innerText = '$' + (stats.today_cost_usd || 0).toFixed(4) + ' (' + (stats.today_cost_iqd || 0).toLocaleString() + ' د.ع)';
+
+                const sourcesBox = document.getElementById('tokens-sources-container');
+                const totalT = stats.total_tokens || 1;
+                
+                if (Object.keys(stats.sources_breakdown).length === 0) {
+                    sourcesBox.innerHTML = '<div style="color:var(--text-muted); grid-column:1/-1;">📭 لم يتم تسجيل أي استهلاك للتوكنات حتى الآن.</div>';
+                } else {
+                    sourcesBox.innerHTML = Object.entries(stats.sources_breakdown).map(([src, count]) => {
+                        const pct = Math.round((count / totalT) * 100);
+                        const sCost = (stats.sources_cost && stats.sources_cost[src]) ? stats.sources_cost[src].toFixed(4) : '0.0000';
+                        const sCostIqd = Math.round((stats.sources_cost[src] || 0) * 1500);
+                        return `
+                            <div class="token-source-card">
+                                <div style="display:flex; justify-content:space-between; font-weight:800; font-size:1.05rem;">
+                                    <span>${escapeHtml(src)}</span>
+                                    <span style="color:var(--secondary); font-size:0.95rem;">$${sCost} (${sCostIqd} د.ع)</span>
+                                </div>
+                                <div style="font-size:0.95rem; color:var(--text-muted); font-weight:700;">
+                                    ${count.toLocaleString()} tokens (${pct}%)
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar-fill" style="width: ${pct}%; background:var(--purple);"></div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+
+                const tbody = document.getElementById('token-calls-table-body');
+                if (!stats.recent_calls || stats.recent_calls.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:var(--text-muted);">لا توجد عمليات استدعاء مسجلة بعد.</td></tr>';
+                } else {
+                    tbody.innerHTML = stats.recent_calls.map(c => `
+                        <tr>
+                            <td><code>${c.timestamp}</code></td>
+                            <td><strong style="color:var(--purple);">${escapeHtml(c.source)}</strong></td>
+                            <td>${c.input_tokens.toLocaleString()}</td>
+                            <td>${c.output_tokens.toLocaleString()}</td>
+                            <td><strong style="color:var(--primary);">${c.total_tokens.toLocaleString()}</strong></td>
+                            <td><strong style="color:var(--secondary);">$${(c.cost_usd || 0).toFixed(5)}</strong></td>
+                            <td style="color:var(--text-muted); font-size:0.95rem;">${escapeHtml(c.snippet || '--')}</td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (err) {
+                console.error("Token stats fetch error:", err);
+            }
+        }
+
+        async function fetchGroupLogs() {
+            const groupSelect = document.getElementById('main-group-select');
+            const selectedGroup = groupSelect.value;
+            const timeline = document.getElementById('main-groups-timeline');
+
+            try {
+                const res = await fetch(`${getBackendURL()}/api/all_group_logs?group_name=${encodeURIComponent(selectedGroup)}`);
+                currentGroupLogsAllData = await res.json();
+                
+                const currentVal = groupSelect.value;
+                groupSelect.innerHTML = '<option value="all">🌐 جميع الكروبات الدراسية المسجلة</option>';
+                if (currentGroupLogsAllData.groups && currentGroupLogsAllData.groups.length > 0) {
+                    currentGroupLogsAllData.groups.forEach(g => {
+                        groupSelect.innerHTML += `<option value="${escapeHtml(g)}">👥 مجموعة: ${escapeHtml(g)}</option>`;
+                    });
+                }
+                groupSelect.value = currentVal;
+
+                renderGroupLogsTimeline();
+            } catch (err) {
+                timeline.innerHTML = "❌ خطأ أثناء جلب سجلات الكروبات: " + err;
+            }
+        }
+
+        function renderGroupLogsTimeline() {
+            const timeline = document.getElementById('main-groups-timeline');
+            const searchQ = document.getElementById('main-group-search').value.toLowerCase().trim();
+
+            if (!currentGroupLogsAllData || !currentGroupLogsAllData.messages || currentGroupLogsAllData.messages.length === 0) {
+                timeline.innerHTML = '<div style="color:var(--text-muted); text-align:center; padding:1.5rem; font-size:1.1rem;">📭 لا تتوفر رسائل مسجلة في الكروب المحدد حتى الآن.</div>';
+                return;
+            }
+
+            let msgs = currentGroupLogsAllData.messages;
+            if (searchQ) {
+                msgs = msgs.filter(m => 
+                    m.content.toLowerCase().includes(searchQ) || 
+                    m.sender.toLowerCase().includes(searchQ) || 
+                    m.group_name.toLowerCase().includes(searchQ)
+                );
+            }
+
+            if (msgs.length === 0) {
+                timeline.innerHTML = '<div style="color:var(--text-muted); text-align:center; padding:1.5rem; font-size:1.1rem;">📭 لا توجد نتائج مطابقة للبحث في حوارات الكروب.</div>';
+                return;
+            }
+
+            timeline.innerHTML = msgs.map(m => `
+                <div class="chat-bubble">
+                    <div class="chat-bubble-header">
+                        <span>👥 مجموعة: <strong style="color:var(--primary); font-size:1.05rem;">${escapeHtml(m.group_name)}</strong> — بواسطة <strong>${escapeHtml(m.sender)}</strong></span>
+                        <span>🕒 ${escapeHtml(m.timestamp)}</span>
+                    </div>
+                    <div class="chat-bubble-content">${escapeHtml(m.content)}</div>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('broadcast-target').addEventListener('change', function() {
+            document.getElementById('specific-users-group').style.display = this.value === 'specific' ? 'block' : 'none';
+        });
+
+        async function fetchLiveData() {
+            if (!checkAdminPINSession()) return;
+            try {
+                const statsRes = await fetch(`${getBackendURL()}/api/stats`);
+                const stats = await statsRes.json();
+                document.getElementById('stat-verified').innerText = stats.verified_count;
+                document.getElementById('stat-pending').innerText = stats.pending_count;
+                document.getElementById('stat-banned').innerText = stats.banned_count;
+                document.getElementById('last-update').innerText = '🕒 آخر تحديث: ' + stats.timestamp;
+
+                const pendingRes = await fetch(`${getBackendURL()}/api/pending_list`);
+                const pendingList = await pendingRes.json();
+                renderPendingList(pendingList);
+
+                const studentsRes = await fetch(`${getBackendURL()}/api/student_list`);
+                allStudents = await studentsRes.json();
+                renderStudentsTable(allStudents);
+
+                fetchTokenStats();
+
+            } catch (err) {
+                console.error("Live fetch error:", err);
+            }
+        }
+
+        function renderPendingList(list) {
+            const container = document.getElementById('pending-container');
+            if (!list || list.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-muted); grid-column: 1/-1;">🎉 لا توجد أي طلبات توثيق معلقة حالياً!</p>';
+                return;
+            }
+
+            container.innerHTML = list.map(item => `
+                <div class="pending-card">
+                    <img src="${getBackendURL()}/ids/${item.user_id}.jpg" onerror="this.src='https://via.placeholder.com/300x180?text=No+ID+Photo'" onclick="openImageModal(this.src)" title="انقر للتكبير">
+                    <div class="info-row"><span class="info-label">اسم الطالب:</span> <span class="info-val">${item.full_name}</span></div>
+                    <div class="info-row"><span class="info-label">المعرف الرقمي:</span> <span class="info-val">${item.user_id}</span></div>
+                    <div class="info-row"><span class="info-label">المستخرج من الهوية:</span> <span class="info-val">${item.extracted_name || 'غير محدد'}</span></div>
+                    <div class="info-row"><span class="info-label">نسبة المطابقة:</span> <span class="info-val" style="color:var(--accent);">${item.matching_similarity}%</span></div>
+                    <div class="info-row"><span class="info-label">تاريخ الطلب:</span> <span class="info-val">${item.submission_time}</span></div>
+                    <div class="action-btns">
+                        <button class="btn btn-approve" onclick="executeAction('approve', '${item.user_id}')">✅ قبول وتوثيق</button>
+                        <button class="btn btn-reject" onclick="executeAction('reject', '${item.user_id}')">❌ رفض</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderStudentsTable(list) {
+            const tbody = document.getElementById('students-table-body');
+            if (!list || list.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">لا يوجد طلاب مسجلين.</td></tr>';
+                return;
+            }
+            tbody.innerHTML = list.map(s => {
+                let badgeClass = s.status.includes('Active') ? 'badge-active' : (s.status.includes('Pending') ? 'badge-pending' : 'badge-banned');
+                return `
+                    <tr class="clickable-row">
+                        <td onclick="openStudentDetailsModal('${s.user_id}')"><code>${s.user_id}</code></td>
+                        <td onclick="openStudentDetailsModal('${s.user_id}')"><strong>${s.full_name}</strong></td>
+                        <td onclick="openStudentDetailsModal('${s.user_id}')">${s.username ? '@' + s.username : 'بدون يوزرنيم'}</td>
+                        <td onclick="openStudentDetailsModal('${s.user_id}')"><span class="badge ${badgeClass}">${s.status}</span></td>
+                        <td onclick="openStudentDetailsModal('${s.user_id}')">${s.verification_time || 'N/A'}</td>
+                        <td>
+                            <button class="btn btn-info" style="padding:0.4rem 0.8rem; font-size:0.9rem;" onclick="openStudentDetailsModal('${s.user_id}')">📂 السجلات والملف</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function filterStudents() {
+            const q = document.getElementById('search-input').value.toLowerCase().trim();
+            if (!q) {
+                renderStudentsTable(allStudents);
+                return;
+            }
+            const filtered = allStudents.filter(s => 
+                s.full_name.toLowerCase().includes(q) || 
+                s.user_id.toString().includes(q) || 
+                (s.username && s.username.toLowerCase().includes(q))
+            );
+            renderStudentsTable(filtered);
+        }
+
+        async function openStudentDetailsModal(userId) {
+            currentModalUserId = userId;
+            document.getElementById('student-details-modal').style.display = 'flex';
+            document.getElementById('modal-student-img').src = `${getBackendURL()}/ids/${userId}.jpg`;
+            document.getElementById('chat-bubbles-box').innerHTML = '<div style="color:var(--text-muted)">⏳ جاري جلب السجلات والمحادثات...</div>';
+
+            try {
+                const profileRes = await fetch(`${getBackendURL()}/api/student_profile?user_id=${userId}`);
+                const prof = await profileRes.json();
+                document.getElementById('m-full-name').innerText = prof.full_name || '--';
+                document.getElementById('m-user-id').innerText = prof.user_id || '--';
+                document.getElementById('m-username').innerText = prof.username ? '@' + prof.username : 'بدون يوزرنيم';
+                document.getElementById('m-extracted-name').innerText = prof.id_extracted_name || '--';
+                document.getElementById('m-similarity').innerText = prof.matching_similarity ? prof.matching_similarity + '%' : '--';
+                document.getElementById('m-status').innerText = prof.status || '--';
+                document.getElementById('m-univ-id').innerText = prof.univ_id || '--';
+                document.getElementById('m-address').innerText = (prof.address || '--') + ' / ' + (prof.birth_year || '--');
+                document.getElementById('m-verification-time').innerText = prof.verification_time || '--';
+                document.getElementById('m-verification-method').innerText = prof.verification_method || '--';
+            } catch (err) {
+                console.error("Profile fetch error:", err);
+            }
+
+            try {
+                const logsRes = await fetch(`${getBackendURL()}/api/student_logs?user_id=${userId}`);
+                currentStudentLogsData = await logsRes.json();
+                
+                const groupSelect = document.getElementById('group-filter-select');
+                groupSelect.innerHTML = '<option value="all">🌐 جميع الكروبات التي تكلم فيها الطالب</option>';
+                if (currentStudentLogsData.groups && currentStudentLogsData.groups.length > 0) {
+                    currentStudentLogsData.groups.forEach(g => {
+                        groupSelect.innerHTML += `<option value="${escapeHtml(g)}">👥 مجموعة: ${escapeHtml(g)}</option>`;
+                    });
+                } else {
+                    groupSelect.innerHTML += '<option value="none" disabled>لم يتكلم في أي مجموعة حتى الآن</option>';
+                }
+
+                renderLogsView();
+            } catch (err) {
+                document.getElementById('chat-bubbles-box').innerText = "❌ حدث خطأ أثناء جلب السجلات: " + err;
+            }
+        }
+
+        function closeStudentModal() {
+            document.getElementById('student-details-modal').style.display = 'none';
+            currentModalUserId = null;
+        }
+
+        function switchLogTab(tab, btn) {
+            currentLogTab = tab;
+            document.querySelectorAll('.log-tab-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            
+            document.getElementById('group-select-wrapper').style.display = (tab === 'groups') ? 'flex' : 'none';
+            document.getElementById('george-ai-wrapper').style.display = (tab === 'george_ai') ? 'flex' : 'none';
+            document.getElementById('chat-bubbles-box').style.display = (tab === 'george_ai') ? 'none' : 'flex';
+
+            renderLogsView();
+        }
+
+        function askGeorgePreset(q) {
+            document.getElementById('george-ai-input').value = q;
+            askGeorgeAI();
+        }
+
+        async function askGeorgeAI() {
+            if (!currentModalUserId) return;
+            const qInput = document.getElementById('george-ai-input');
+            const q = qInput.value.trim();
+            const resBox = document.getElementById('george-response-box');
+
+            if (!q) {
+                alert("⚠️ يرجى كتابة سؤالك لجورج الذكي أولاً!");
+                return;
+            }
+
+            resBox.innerText = "⏳ جورج يقرأ ملف الطالب ويحلل سجلات النظام والعلاقات المتبادلة...";
+            resBox.style.color = "var(--accent)";
+
+            try {
+                const res = await fetch(`${getBackendURL()}/api/george_ask?user_id=${currentModalUserId}&question=${encodeURIComponent(q)}`);
+                const data = await res.json();
+                resBox.innerText = data.answer;
+                resBox.style.color = "var(--text-main)";
+            } catch (err) {
+                resBox.innerText = "❌ حدث خطأ أثناء تحليل جورج: " + err;
+                resBox.style.color = "var(--danger)";
+            }
+        }
+
+        function renderLogsView() {
+            if (currentLogTab === 'george_ai') return;
+            
+            const container = document.getElementById('chat-bubbles-box');
+            const searchQ = document.getElementById('log-search-input').value.toLowerCase().trim();
+            const selectedGroup = document.getElementById('group-filter-select').value;
+
+            if (!currentStudentLogsData) {
+                container.innerHTML = '<div style="color:var(--text-muted)">📭 لا تتوفر بيانات محادثات.</div>';
+                return;
+            }
+
+            if (currentLogTab === 'groups') {
+                let list = currentStudentLogsData.activities || [];
+                list = list.filter(a => a.group_name && a.group_name !== 'خاص' && a.chat_type !== 'محادثة خاصة');
+                if (selectedGroup !== 'all') {
+                    list = list.filter(a => a.group_name === selectedGroup);
+                }
+                if (searchQ) {
+                    list = list.filter(a => a.content.toLowerCase().includes(searchQ) || a.group_name.toLowerCase().includes(searchQ));
+                }
+
+                if (list.length === 0) {
+                    container.innerHTML = '<div style="color:var(--text-muted); text-align:center; padding:1.2rem; font-size:1.05rem;">📭 لا توجد رسائل لهذا الطالب في الكروب المحدد ينطبق عليها البحث.</div>';
+                    return;
+                }
+
+                container.innerHTML = list.map(item => `
+                    <div class="chat-bubble">
+                        <div class="chat-bubble-header">
+                            <span>👥 مجموعة: <strong style="color:var(--primary); font-size:1.05rem;">${escapeHtml(item.group_name)}</strong> (بواسطة ${escapeHtml(item.sender)})</span>
+                            <span>🕒 ${escapeHtml(item.timestamp)}</span>
+                        </div>
+                        <div class="chat-bubble-content">${escapeHtml(item.content)}</div>
+                    </div>
+                `).join('');
+
+            } else if (currentLogTab === 'memory') {
+                let memList = currentStudentLogsData.memory_logs || [];
+                if (searchQ) {
+                    memList = memList.filter(m => JSON.stringify(m).toLowerCase().includes(searchQ));
+                }
+                if (memList.length === 0) {
+                    container.innerHTML = '<div style="color:var(--text-muted); text-align:center; padding:1.2rem; font-size:1.05rem;">📭 لا توجد ذاكرة محادثات خاصة مخزنة لهذا الطالب ينطبق عليها البحث.</div>';
+                    return;
+                }
+                container.innerHTML = memList.map((m, idx) => `
+                    <div class="chat-bubble" style="border-right:4px solid var(--primary);">
+                        <div class="chat-bubble-header">
+                            <span>🤖 رسالة ذكاء اصطناعي #${idx+1} (${m.role || 'مستخدم'})</span>
+                        </div>
+                        <div class="chat-bubble-content" style="white-space:pre-wrap;">${escapeHtml(typeof m.content === 'string' ? m.content : JSON.stringify(m, null, 2))}</div>
+                    </div>
+                `).join('');
+
+            } else {
+                let list = currentStudentLogsData.activities || [];
+                if (searchQ) {
+                    list = list.filter(a => a.content.toLowerCase().includes(searchQ) || a.chat_type.toLowerCase().includes(searchQ));
+                }
+                if (list.length === 0) {
+                    container.innerHTML = '<div style="color:var(--text-muted); text-align:center; padding:1.2rem; font-size:1.05rem;">📭 لا توجد سجلات مطابقة.</div>';
+                    return;
+                }
+                container.innerHTML = list.map(item => `
+                    <div class="chat-bubble">
+                        <div class="chat-bubble-header">
+                            <span>📌 ${escapeHtml(item.chat_type)} | ${escapeHtml(item.sender)}</span>
+                            <span>🕒 ${escapeHtml(item.timestamp)}</span>
+                        </div>
+                        <div class="chat-bubble-content">${escapeHtml(item.content)}</div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        async function executeAction(action, userId) {
+            if (!confirm(`هل أنت متأكد من تنفيذ الإجراء (${action}) على الطالب (${userId})؟`)) return;
+            try {
+                const res = await fetch(`${getBackendURL()}/api/action?action=${action}&user_id=${userId}`);
+                const data = await res.json();
+                alert(data.message);
+                fetchLiveData();
+            } catch (err) {
+                alert("❌ حدث خطأ أثناء تنفيذ الإجراء: " + err);
+            }
+        }
+
+        async function executeModalAction(action) {
+            if (!currentModalUserId) return;
+            await executeAction(action, currentModalUserId);
+            openStudentDetailsModal(currentModalUserId);
+        }
+
+        async function sendDirectMessageToStudent() {
+            if (!currentModalUserId) return;
+            const text = prompt("أدخل نص الرسالة الخاصة أو التبليغ الذي تريد توجيهه لهذا الطالب:");
+            if (!text) return;
+            try {
+                const res = await fetch(`${getBackendURL()}/api/action?action=broadcast&user_id=${currentModalUserId}&message=${encodeURIComponent(text)}`);
+                const data = await res.json();
+                alert(data.message);
+            } catch (err) {
+                alert("❌ حدث خطأ أثناء الإرسال: " + err);
+            }
+        }
+
+        async function sendBroadcast() {
+            const target = document.getElementById('broadcast-target').value;
+            const text = document.getElementById('broadcast-text').value.trim();
+            const specific = document.getElementById('specific-users-input').value.trim();
+            const statusEl = document.getElementById('broadcast-status');
+
+            if (!text) {
+                alert("⚠️ يرجى كتابة نص التبليغ أولاً!");
+                return;
+            }
+
+            statusEl.innerText = "⏳ جاري إرسال التبليغ...";
+            statusEl.style.color = "var(--accent)";
+
+            try {
+                let url = `${getBackendURL()}/api/action?action=${target === 'all_verified' ? 'broadcast_all' : 'broadcast'}&message=${encodeURIComponent(text)}`;
+                if (target === 'specific') {
+                    url += `&user_id=${encodeURIComponent(specific)}`;
+                }
+                const res = await fetch(url);
+                const data = await res.json();
+                statusEl.innerText = data.message;
+                statusEl.style.color = "var(--secondary)";
+            } catch (err) {
+                statusEl.innerText = "❌ حدث خطأ أثناء التبليغ: " + err;
+                statusEl.style.color = "var(--danger)";
+            }
+        }
+
+        function openImageModal(src) {
+            document.getElementById('modal-img').src = src;
+            document.getElementById('image-modal').style.display = 'flex';
+        }
+
+        checkAdminPINSession();
+        fetchLiveData();
+        setInterval(fetchLiveData, 1500);
+    </script>
+</body>
+</html>
