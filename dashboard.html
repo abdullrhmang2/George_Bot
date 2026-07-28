@@ -909,6 +909,11 @@
         let currentGroupLogsAllData = null;
 
         function getBackendURL() {
+            // إذا تم فتح الصفحة مباشرة عبر رابط النفق (مثل lhr.life أو serveo)، استخدم نفس نطاق الصفحة لتجنب أخطاء المختلط HTTP/HTTPS
+            if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && !window.location.hostname.includes('github.io') && window.location.protocol !== 'file:') {
+                return window.location.origin;
+            }
+
             let u = localStorage.getItem('george_backend_url') || '';
             if (!u) {
                 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:') {
@@ -980,20 +985,19 @@
 
         async function autoLoadBackendURLConfig() {
             try {
-                let saved = localStorage.getItem('george_backend_url');
-                if (!saved) {
-                    const res = await fetch('backend_config.json');
-                    if (res.ok) {
-                        const cfg = await res.json();
-                        if (cfg && cfg.backend_url) {
-                            document.getElementById('backend-url-field').value = cfg.backend_url;
-                        }
+                const res = await fetch('backend_config.json?v=' + Date.now());
+                if (res.ok) {
+                    const cfg = await res.json();
+                    if (cfg && cfg.backend_url) {
+                        localStorage.setItem('george_backend_url', cfg.backend_url);
+                        document.getElementById('backend-url-field').value = cfg.backend_url;
                     }
-                } else {
-                    document.getElementById('backend-url-field').value = saved;
                 }
             } catch (e) {
-                console.log("No backend_config.json");
+                let saved = localStorage.getItem('george_backend_url');
+                if (saved) {
+                    document.getElementById('backend-url-field').value = saved;
+                }
             }
         }
 
